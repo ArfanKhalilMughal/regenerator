@@ -11,6 +11,9 @@
   "description": "Runtime for Regenerator-compiled generator and async functions.",
   "version": "0.14.2",
   "main": "runtime.js",
+  "scripts": {
+    "test": "node test/smoke.js"
+  },
   "keywords": [
     "regenerator",
     "runtime",
