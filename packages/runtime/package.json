@@ -9,7 +9,7 @@
     "Ben Newman <bn@cs.stanford.edu>"
   ],
   "description": "Runtime for Regenerator-compiled generator and async functions.",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "main": "runtime.js",
   "scripts": {
     "test": "node test/smoke.js"

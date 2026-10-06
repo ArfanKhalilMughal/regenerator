@@ -3,7 +3,7 @@
 > **Fork notice:** `@zklogic/regenerator-runtime` is a maintained, drop-in republish of the [`regenerator-runtime`](https://github.com/facebook/regenerator/tree/main/packages/runtime) package (MIT, © Facebook, Inc.), kept under the `@zklogic` scope because the original package is no longer maintained. The runtime code is unchanged. To use it for every dependent in your tree, alias it in `package.json`:
 >
 > ```json
-> { "overrides": { "regenerator-runtime": "npm:@zklogic/regenerator-runtime@^0.14.2" } }
+> { "overrides": { "regenerator-runtime": "npm:@zklogic/regenerator-runtime@^0.14.3" } }
 > ```
 
 Standalone runtime for
