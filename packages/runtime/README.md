@@ -6,6 +6,36 @@
 > { "overrides": { "regenerator-runtime": "npm:@zklogic/regenerator-runtime@^0.14.3" } }
 > ```
 
+## What changed from `regenerator-runtime`, and why
+
+**Why this exists.** `regenerator-runtime` is deprecated on npm and no longer
+maintained, so security scanners (for example Sonatype Lifecycle) flag it as
+end-of-life, and projects that still depend on it, directly or through
+packages such as `kochava` or `canvg`, cannot upgrade to a maintained release.
+This fork is a maintained copy that you can alias in place of the original
+without touching your dependents.
+
+**What is different**
+- **Package name:** published as `@zklogic/regenerator-runtime`. This is the
+  only change that affects consumers, and it is why the alias above is needed.
+- **Runtime code:** `runtime.js` and `path.js` are byte-for-byte the code of
+  upstream `regenerator-runtime`, so behaviour is identical, including defining
+  the global `regeneratorRuntime`.
+- **Package metadata:** `package.json` has the new name, author, repository,
+  bugs URL and a `forkedFrom` field that credits the original authors.
+- **Tests:** added `test/smoke.js` (`npm test`), which checks the runtime API,
+  a generator driven through `mark`/`wrap`, `path.js` and the global. It is not
+  published in the package.
+- **Publishing:** `.github/workflows/publish.yml` runs the tests and publishes
+  to npm when a `v*` tag is pushed.
+- **Staying current:** `scripts/sync-upstream.sh` merges new upstream commits
+  into the fork and re-applies the fork metadata, so the fork keeps tracking
+  Facebook's repository.
+
+Everything else, including the license (MIT, © Facebook, Inc.), is unchanged.
+Bugs in the runtime itself belong upstream; bugs in this packaging belong in
+the [fork's issues](https://github.com/ArfanKhalilMughal/regenerator/issues).
+
 Standalone runtime for
 [Regenerator](https://github.com/facebook/regenerator)-compiled generator
 and `async` functions.
