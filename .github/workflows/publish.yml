@@ -1,0 +1,63 @@
+name: Publish @zklogic/regenerator-runtime
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Tag to publish (must be a v* version tag)
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: packages/runtime
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          fetch-depth: 0
+      - name: Check for version tag
+        id: version_tag
+        working-directory: .
+        run: |
+          if git tag --points-at HEAD | grep -Eq '^v.+'; then
+            echo "is_version_tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_version_tag=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.version_tag.outputs.is_version_tag == 'true'
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Upgrade npm for OIDC provenance support
+        if: steps.version_tag.outputs.is_version_tag == 'true'
+        run: npm install -g npm@latest
+      - name: Verify tag matches packages/runtime version
+        if: steps.version_tag.outputs.is_version_tag == 'true'
+        run: |
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if ! git tag --points-at HEAD | grep -Fxq "$PKG_VERSION"; then
+            echo "ERROR: no tag $PKG_VERSION on this commit (packages/runtime version mismatch)."
+            exit 1
+          fi
+      - name: Smoke test
+        if: steps.version_tag.outputs.is_version_tag == 'true'
+        run: node -e "
+          const r = require('./runtime');
+          function* g(){ yield 1; yield 2; }
+          const out = [];
+          for (const v of g()) out.push(v);
+          if (out.join() !== '1,2') { throw new Error('generator broken'); }
+          if (typeof r.mark !== 'function' || typeof r.wrap !== 'function') { throw new Error('runtime API missing'); }
+          console.log('runtime ok');"
+      - run: npm publish --access public
+        if: steps.version_tag.outputs.is_version_tag == 'true'

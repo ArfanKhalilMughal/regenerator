@@ -1,8 +1,15 @@
 {
-  "name": "regenerator-runtime",
-  "author": "Ben Newman <bn@cs.stanford.edu>",
+  "name": "@zklogic/regenerator-runtime",
+  "author": {
+    "name": "Arfan Khalil Mughal",
+    "email": "arfankhalil@hotmail.com",
+    "url": "https://github.com/ArfanKhalilMughal"
+  },
+  "contributors": [
+    "Ben Newman <bn@cs.stanford.edu>"
+  ],
   "description": "Runtime for Regenerator-compiled generator and async functions.",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "main": "runtime.js",
   "keywords": [
     "regenerator",
@@ -13,7 +20,20 @@
   "sideEffects": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebook/regenerator/tree/main/packages/runtime"
+    "url": "https://github.com/ArfanKhalilMughal/regenerator.git",
+    "directory": "packages/runtime"
+  },
+  "forkedFrom": {
+    "repository": "https://github.com/facebook/regenerator",
+    "author": "Ben Newman",
+    "url": "https://github.com/benjamn"
+  },
+  "bugs": {
+    "email": "arfankhalil@hotmail.com",
+    "url": "https://github.com/ArfanKhalilMughal/regenerator/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT"
 }
